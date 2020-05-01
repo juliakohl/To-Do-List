@@ -49,17 +49,28 @@ app.post("/", function(req, res){
 
   const item = new Item({name: itemName});
   item.save();
-  
+
   res.redirect("/");
 });
 
-app.get("/work", function(req,res){
-  res.render("list", {listTitle: "Work List", newListItems: workItems});
+app.post("/delete", function(req, res){
+  const checkedItemId = req.body.checkbox;
+
+  Item.findByIdAndRemove(checkedItemId, function(err){
+    if (!err) {
+      console.log("Removed Item");
+      res.redirect("/");
+    };
+  });
 });
 
-app.get("/about", function(req, res){
-  res.render("about");
-});
+// app.get("/work", function(req,res){
+//   res.render("list", {listTitle: "Work List", newListItems: workItems});
+// });
+
+// app.get("/about", function(req, res){
+//   res.render("about");
+// });
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
